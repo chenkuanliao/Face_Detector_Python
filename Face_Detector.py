@@ -1,13 +1,15 @@
-import re
+import sys
 import cv2
 from random import randrange
-import os
+from os import system, name
 import time
 import keyboard
 import threading
 
 
 def Run_Image_Face_Detector():
+    print('Press any key to exit')
+
     # loading some pre-trained data on face frontals from opencv (haar cascade algorithm)
     trained_face_data = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
@@ -30,8 +32,10 @@ def Run_Image_Face_Detector():
     cv2.imshow('Image Face Detector', img)
 
     # wait until a key is pressed
-    cv2.waitKey()
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
+    print('Leaving Image Face Detection Mode ...')
     return
 
 def Run_WebCam_Face_Detector():
@@ -70,7 +74,9 @@ def Run_WebCam_Face_Detector():
         key = cv2.waitKey(1)
 
         # stop if Q key is pressed
-        if key == 81 or key == 113:
+        if key != -1:
+            cv2.destroyAllWindows()
+            print('Leaving WebCam Face Detection Mode ...')
             break
 
     return
@@ -78,6 +84,9 @@ def Run_WebCam_Face_Detector():
 
     # release the videoCapture object
     webcam.release()
+
+if name == 'nt':
+    _ = system('cls')
 
 while True:
     print('Please enter:')
@@ -94,10 +103,12 @@ while True:
     elif value == '1':
         print('Entered Image Face Detection Mode ...')
         Run_Image_Face_Detector()
+        print()
     
     elif value == '2':
         print('Entered WebCam Face Detection Mode ...')
         Run_WebCam_Face_Detector()
+        print()
         
     
     else:
